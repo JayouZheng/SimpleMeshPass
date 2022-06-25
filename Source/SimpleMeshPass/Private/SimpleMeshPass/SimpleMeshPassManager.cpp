@@ -5,8 +5,6 @@
  *  .
  *********************************************************************/
 
-#pragma optimize("", off)
-
 #include "SimpleMeshPassManager.h"
 #include "EngineModule.h"
 #include "TextureResource.h"
@@ -184,5 +182,3 @@ void FSimpleMeshPassManager::Render(FPostOpaqueRenderParameters& InParameters)
 			SimpleMeshPass->SubmitDraw(RHICmdList, PassParameters->InstanceCullingDrawParams);
 		});
 }
-
-#pragma optimize("", on)

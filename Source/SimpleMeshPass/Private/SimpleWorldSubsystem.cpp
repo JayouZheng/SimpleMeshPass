@@ -5,8 +5,6 @@
  *  .
  *********************************************************************/
 
-#pragma optimize("", off)
-
 #include "SimpleWorldSubsystem.h"
 #include "Engine/TextureRenderTarget2D.h"
 #include "RHICommandList.h"
@@ -75,5 +73,3 @@ void USimpleWorldSubsystem::Deinitialize()
 			}
 		});
 }
-
-#pragma optimize("", on)
