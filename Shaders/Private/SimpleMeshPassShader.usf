@@ -1,0 +1,49 @@
+/*********************************************************************
+ *  SimpleMeshPassShader.usf
+ *  Copyright (C) 2022 Jayou. All Rights Reserved.
+ * 
+ *  .
+ *********************************************************************/
+
+#include "/Engine/Private/Common.ush"
+#include "/Engine/Generated/Material.ush"
+#include "/Engine/Generated/VertexFactory.ush"
+
+struct FSimpleMeshPassVSToPS
+{
+    FVertexFactoryInterpolantsVSToPS FactoryInterpolants;
+    float4 Position : SV_POSITION;
+};
+
+#if VERTEXSHADER
+void MainVS(
+    FVertexFactoryInput Input,
+	out FSimpleMeshPassVSToPS Output)
+{
+    ResolvedView = ResolveView();
+	
+    FVertexFactoryIntermediates VFIntermediates = GetVertexFactoryIntermediates(Input);
+    float4 WorldPos = VertexFactoryGetWorldPosition(Input, VFIntermediates);
+    float3x3 TangentToLocal = VertexFactoryGetTangentToLocal(Input, VFIntermediates);
+
+    FMaterialVertexParameters VertexParameters = GetMaterialVertexParameters(Input, VFIntermediates, WorldPos.xyz, TangentToLocal);
+    WorldPos.xyz += GetMaterialWorldPositionOffset(VertexParameters);
+    
+    float4 RasterizedWorldPosition = VertexFactoryGetRasterizedWorldPosition(Input, VFIntermediates, WorldPos);
+
+    Output.FactoryInterpolants = VertexFactoryGetInterpolantsVSToPS(Input, VFIntermediates, VertexParameters);
+    Output.Position = mul(RasterizedWorldPosition, ResolvedView.TranslatedWorldToClip);
+}
+#endif // VERTEXSHADER
+
+float4 Parameter;
+
+void MainPS(
+    FSimpleMeshPassVSToPS Input,
+	out float4 OutColor : SV_Target0)
+{
+    ResolvedView = ResolveView();
+    
+    float2 ScreenUV = float2(Input.Position.xy * ResolvedView.BufferSizeAndInvSize.zw);
+    OutColor = float4(SimpleMeshPass.SceneColor.SampleLevel(SimpleMeshPass.SceneColorSampler, ScreenUV, 0).rgb * Parameter.rgb, 1.0f);
+}

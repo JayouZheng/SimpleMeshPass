@@ -1,0 +1,26 @@
+# Build and Release Folders
+x64/
+Debug/
+Release/
+Texture/
+VTune Profiler Results/
+GPUCache/
+CMBuild/
+Binaries/
+Intermediate/
+
+# Other files and folders
+.vs/
+.*/
+
+# Executables
+*.zip
+*.fbx
+*.zip.baiduyun.uploading.cfg
+debug.log
+
+# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
+# should NOT be excluded as they contain compiler settings and other important
+# information for Eclipse / Flash Builder.
+
+*.user
